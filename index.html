@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Shadow Brute">
+<link rel="manifest" href="manifest.json">
+<title>Shadow Brute Calculator</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0f14;--card:#151b23;--border:#2b3440;--text:#f3f4f6;--muted:#a8b0bc;--accent:#6ee7b7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}
+main{max-width:680px;margin:auto;padding:calc(20px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom))}
+h1{font-size:28px;margin:8px 0 4px}.sub{color:var(--muted);margin:0 0 22px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
+label{display:block;font-weight:600;margin:15px 0 7px}input,select{width:100%;font:inherit;font-size:18px;color:var(--text);background:#0e141b;border:1px solid var(--border);border-radius:12px;padding:14px}
+.result{text-align:center;padding:26px 18px}.number{font-size:64px;font-weight:800;letter-spacing:-3px;margin:5px 0}.muted{color:var(--muted);font-size:14px}.summary{display:flex;justify-content:space-between;padding-top:10px;margin-top:14px;border-top:1px solid var(--border)}
+.error{color:#fca5a5;margin-top:12px;font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<h1>Shadow Brute Calculator</h1>
+<p class="sub">Wahrscheinlichkeit beim zufälligen Banishen von 3 Karten.</p>
+<section class="card">
+<label for="gy">Karten im Graveyard</label>
+<input id="gy" type="number" min="3" step="1" value="10" inputmode="numeric">
+<label for="six">Davon 6+ Attack</label>
+<input id="six" type="number" min="0" step="1" value="3" inputmode="numeric">
+<label for="req">Benötigte 6+ Attack-Karten</label>
+<select id="req"><option value="1">Mindestens 1</option><option value="2">Mindestens 2</option><option value="3">Alle 3</option></select>
+</section>
+<section class="card result">
+<div class="muted">Wahrscheinlichkeit</div>
+<div id="result" class="number">71.1%</div>
+<div id="explanation" class="muted">Mindestens eine 6+ Attack-Karte unter den 3 gebanishten Karten.</div>
+<div class="summary"><span class="muted">3 Karten werden gebanished</span><strong id="summary">10 / 3</strong></div>
+<div id="error" class="error"></div>
+</section>
+</main>
+<script>
+const gy=document.getElementById('gy'),six=document.getElementById('six'),req=document.getElementById('req');
+const result=document.getElementById('result'),explanation=document.getElementById('explanation'),error=document.getElementById('error'),summary=document.getElementById('summary');
+function C(n,k){if(k<0||k>n)return 0;k=Math.min(k,n-k);let v=1;for(let i=1;i<=k;i++)v*=((n-k+i)/i);return v}
+function calc(){const N=+gy.value,K=+six.value,R=+req.value,D=3;error.textContent='';summary.textContent=(Number.isInteger(N)?N:'—')+' / '+(Number.isInteger(K)?K:'—');
+if(!Number.isInteger(N)||!Number.isInteger(K)||N<3||K<0||K>N){result.textContent='—';explanation.textContent='Bitte gültige Werte eingeben.';error.textContent='Der Graveyard muss mindestens 3 Karten enthalten; 6+ darf nicht größer als der Graveyard sein.';return}
+let p=0;for(let h=R;h<=Math.min(K,D);h++)p+=C(K,h)*C(N-K,D-h)/C(N,D);
+result.textContent=(100*p).toFixed(1)+'%';const l=R===1?'mindestens eine':R===2?'mindestens zwei':'alle drei';explanation.textContent='Chance auf '+l+' 6+ Attack-Karte(n) unter den 3 gebanish­ten Karten.'}
+[gy,six,req].forEach(x=>x.addEventListener('input',calc));calc();
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body></html>
