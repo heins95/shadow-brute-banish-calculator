@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -23,20 +23,20 @@ label{display:block;font-weight:600;margin:15px 0 7px}input,select{width:100%;fo
 <body>
 <main>
 <h1>Shadow Brute Calculator</h1>
-<p class="sub">Wahrscheinlichkeit beim zufälligen Banishen von 3 Karten.</p>
+<p class="sub">Probability when randomly banishing 3 cards.</p>
 <section class="card">
-<label for="gy">Karten im Graveyard</label>
+<label for="gy">Cards in Graveyard</label>
 <input id="gy" type="number" min="3" step="1" value="10" inputmode="numeric">
-<label for="six">Davon 6+ Attack</label>
+<label for="six">6+ Attack Cards</label>
 <input id="six" type="number" min="0" step="1" value="3" inputmode="numeric">
-<label for="req">Benötigte 6+ Attack-Karten</label>
-<select id="req"><option value="1">Mindestens 1</option><option value="2">Mindestens 2</option><option value="3">Alle 3</option></select>
+<label for="req">Required 6+ Attack Cards</label>
+<select id="req"><option value="1">At least 1</option><option value="2">At least 2</option><option value="3">All 3</option></select>
 </section>
 <section class="card result">
-<div class="muted">Wahrscheinlichkeit</div>
+<div class="muted">Probability</div>
 <div id="result" class="number">71.1%</div>
-<div id="explanation" class="muted">Mindestens eine 6+ Attack-Karte unter den 3 gebanishten Karten.</div>
-<div class="summary"><span class="muted">3 Karten werden gebanished</span><strong id="summary">10 / 3</strong></div>
+<div id="explanation" class="muted">Chance of getting at least one 6+ Attack card among the 3 banished cards.</div>
+<div class="summary"><span class="muted">3 cards are banished</span><strong id="summary">10 / 3</strong></div>
 <div id="error" class="error"></div>
 </section>
 </main>
@@ -45,9 +45,9 @@ const gy=document.getElementById('gy'),six=document.getElementById('six'),req=do
 const result=document.getElementById('result'),explanation=document.getElementById('explanation'),error=document.getElementById('error'),summary=document.getElementById('summary');
 function C(n,k){if(k<0||k>n)return 0;k=Math.min(k,n-k);let v=1;for(let i=1;i<=k;i++)v*=((n-k+i)/i);return v}
 function calc(){const N=+gy.value,K=+six.value,R=+req.value,D=3;error.textContent='';summary.textContent=(Number.isInteger(N)?N:'—')+' / '+(Number.isInteger(K)?K:'—');
-if(!Number.isInteger(N)||!Number.isInteger(K)||N<3||K<0||K>N){result.textContent='—';explanation.textContent='Bitte gültige Werte eingeben.';error.textContent='Der Graveyard muss mindestens 3 Karten enthalten; 6+ darf nicht größer als der Graveyard sein.';return}
+if(!Number.isInteger(N)||!Number.isInteger(K)||N<3||K<0||K>N){result.textContent='—';explanation.textContent='Please enter valid values.';error.textContent='The Graveyard must contain at least 3 cards, and the number of 6+ Attack cards cannot exceed the Graveyard size.';return}
 let p=0;for(let h=R;h<=Math.min(K,D);h++)p+=C(K,h)*C(N-K,D-h)/C(N,D);
-result.textContent=(100*p).toFixed(1)+'%';const l=R===1?'mindestens eine':R===2?'mindestens zwei':'alle drei';explanation.textContent='Chance auf '+l+' 6+ Attack-Karte(n) unter den 3 gebanish­ten Karten.'}
+result.textContent=(100*p).toFixed(1)+'%';const l=R===1?'at least one':R===2?'at least two':'all three';explanation.textContent='Chance of getting '+l+' 6+ Attack card(s) among the 3 banished cards.'}
 [gy,six,req].forEach(x=>x.addEventListener('input',calc));calc();
 if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
