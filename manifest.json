@@ -3,7 +3,7 @@
   "short_name":"Shadow Brute",
   "start_url":".",
   "display":"standalone",
-  "background_color":"#0b0f14",
-  "theme_color":"#111827",
-  "lang":"en"
+  "background_color":"#0b0c0f",
+  "theme_color":"#111318",
+  "icons":[]
 }
