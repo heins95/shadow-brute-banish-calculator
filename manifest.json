@@ -1,9 +1,1 @@
-{
-  "name":"Shadow Brute Calculator",
-  "short_name":"Shadow Brute",
-  "start_url":".",
-  "display":"standalone",
-  "background_color":"#0b0c0f",
-  "theme_color":"#111318",
-  "icons":[]
-}
+{"name":"Shadow Brute Calculator","short_name":"Shadow Brute","start_url":".","display":"standalone","background_color":"#0b0c0f","theme_color":"#111318","icons":[]}
